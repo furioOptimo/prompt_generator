@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prompt Generator</title>
+
+  <style>
+    :root {
+      --bg: #111318;
+      --panel: #191d24;
+      --panel2: #222833;
+      --text: #f4f7fb;
+      --muted: #aeb7c6;
+      --accent: #7dd3fc;
+      --border: #303846;
+      --ok: #86efac;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .wrap {
+      width: min(920px, 92vw);
+      margin: 40px auto;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 5vw, 44px);
+    }
+
+    .sub {
+      color: var(--muted);
+      margin: 0 0 28px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    select,
+    input {
+      width: 100%;
+      background: var(--panel2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font: inherit;
+    }
+
+    .chords {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      word-spacing: 8px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 330px;
+      resize: vertical;
+      background: #0d1015;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      font: 15px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-weight: 800;
+      cursor: pointer;
+      background: var(--accent);
+      color: #062231;
+    }
+
+    button.secondary {
+      background: var(--panel2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    #status {
+      color: var(--ok);
+      font-weight: 700;
+      align-self: center;
+      min-height: 1.5em;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+
+    <h1>Prompt Generator</h1>
+
+    <p class="sub">
+      Choose a key, mood, and intensity. The app builds a guitar-friendly
+      atmospheric rock prompt automatically.
+    </p>
+
+    <section class="grid">
+
+      <div class="card">
+        <label for="key">Key</label>
+        <select id="key"></select>
+
+        <div class="chords" id="chords"></div>
+      </div>
+
+      <div class="card">
+        <label for="tempo">Tempo</label>
+
+        <input
+          id="tempo"
+          type="number"
+          min="40"
+          max="140"
+          value="68"
+        />
+
+        <div class="note">
+          Double-time feel is calculated automatically.
+        </div>
+      </div>
+
+      <div class="card">
+        <label for="mood">Mood</label>
+
+        <select id="mood">
+          <option>uplifting</option>
+          <option>melancholic</option>
+          <option>hopeful</option>
+          <option>dreamy</option>
+          <option>moody</option>
+          <option>anthemic</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <label for="intensity">Mood intensity</label>
+
+        <select id="intensity">
+          <option value="subtle">Subtle</option>
+          <option value="emotional" selected>Emotional</option>
+          <option value="soaring">Soaring</option>
+        </select>
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <label for="prompt">Generated prompt</label>
+
+      <textarea id="prompt"></textarea>
+
+      <div class="actions">
+
+        <button id="copy">
+          Copy prompt
+        </button>
+
+        <button class="secondary" id="reset">
+          Reset
+        </button>
+
+        <span id="status"></span>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    const keys = {
+      "G major": {
+        chords: ["G", "C", "D", "Em", "Am"],
+        note: "open-position friendly"
+      },
+
+      "D major": {
+        chords: ["D", "G", "A", "Bm", "Em"],
+        note: "very guitar-friendly"
+      },
+
+      "A major": {
+        chords: ["A", "D", "E", "F#m", "Bm"],
+        note: "mostly open-position friendly"
+      },
+
+      "E major": {
+        chords: ["E", "A", "B", "C#m", "F#m"],
+        note: "strong open-string resonance"
+      },
+
+      "C major": {
+        chords: ["C", "F", "G", "Am", "Dm"],
+        note: "simple, with F often played as Fmaj7 or partial barre"
+      },
+
+      "F major": {
+        chords: ["F", "Bb", "C", "Dm", "Gm"],
+        note: "better as capo-friendly voicings"
+      },
+
+      "Bb major": {
+        chords: ["Bb", "Eb", "F", "Gm", "Cm"],
+        note: "best treated as capo-friendly"
+      },
+
+      "Eb major": {
+        chords: ["Eb", "Ab", "Bb", "Cm", "Fm"],
+        note: "best treated as capo-friendly"
+      }
+    };
+
+
+    const intensityDescriptions = {
+
+      subtle:
+        "restrained and understated, with gentle dynamics, gradual development, and no oversized climax",
+
+      emotional:
+        "expressive and emotionally building, with warm dynamics and a satisfying gradual lift",
+
+      soaring:
+        "expansive and powerful, building toward a wide, uplifting, climactic section while remaining spacious for lead guitar"
+
+    };
+
+
+    const keyEl =
+      document.getElementById("key");
+
+    const chordsEl =
+      document.getElementById("chords");
+
+    const tempoEl =
+      document.getElementById("tempo");
+
+    const moodEl =
+      document.getElementById("mood");
+
+    const intensityEl =
+      document.getElementById("intensity");
+
+    const promptEl =
+      document.getElementById("prompt");
+
+    const statusEl =
+      document.getElementById("status");
+
+
+    Object.keys(keys).forEach(key => {
+
+      const option =
+        document.createElement("option");
+
+      option.value = key;
+      option.textContent = key;
+
+      keyEl.appendChild(option);
+
+    });
+
+
+    keyEl.value = "G major";
+
+
+    function generatePrompt() {
+
+      const key =
+        keyEl.value;
+
+      const { chords, note } =
+        keys[key];
+
+      const bpm =
+        Number(tempoEl.value) || 68;
+
+      const doubleTime =
+        bpm * 2;
+
+      const mood =
+        moodEl.value;
+
+      const intensity =
+        intensityEl.value;
+
+      const intensityText =
+        intensityDescriptions[intensity];
+
+
+      chordsEl.textContent =
+        chords.join(" · ");
+
+
+      const capoPhrase =
+        note.includes("capo")
+          ? "Use capo-friendly open-position guitar voicings"
+          : "Use a simple, highly playable open-chord guitar progression";
+
+
+      promptEl.value =
+`Instrumental melodic atmospheric rock backing track in 4/4 at ${bpm} BPM, with a ${doubleTime} BPM double-time feel. ${capoPhrase} in ${key}, built mainly from ${chords.join(", ")}, with long chord durations and minimal harmonic complexity. Use steady, lightly humanized sixteenth-note closed hi-hats or shaker, strong snare on beats 2 and 4, and a deep, restrained syncopated kick emphasizing beats 1 and 3 with occasional pickups. Keep drums predictable, avoiding busy fills, ghost notes, trap rolls, and abrupt changes. Add brief tom fills and crashes only every 8 or 16 bars. Build from a spacious intro into a ${mood} rock section that is ${intensityText}. Maintain clear phrasing, steady harmony, and plenty of room for expressive lead guitar.`;
+
+    }
+
+
+    [
+      keyEl,
+      tempoEl,
+      moodEl,
+      intensityEl
+
+    ].forEach(element => {
+
+      element.addEventListener(
+        "input",
+        generatePrompt
+      );
+
+    });
+
+
+    document
+      .getElementById("copy")
+      .addEventListener("click", async () => {
+
+        try {
+
+          await navigator.clipboard.writeText(
+            promptEl.value
+          );
+
+          statusEl.textContent =
+            "Copied!";
+
+          setTimeout(() => {
+            statusEl.textContent = "";
+          }, 1400);
+
+        }
+
+        catch {
+
+          promptEl.select();
+
+          document.execCommand("copy");
+
+          statusEl.textContent =
+            "Copied!";
+
+          setTimeout(() => {
+            statusEl.textContent = "";
+          }, 1400);
+
+        }
+
+      });
+
+
+    document
+      .getElementById("reset")
+      .addEventListener("click", () => {
+
+        keyEl.value =
+          "G major";
+
+        tempoEl.value =
+          68;
+
+        moodEl.value =
+          "uplifting";
+
+        intensityEl.value =
+          "emotional";
+
+        generatePrompt();
+
+      });
+
+
+    generatePrompt();
+
+  </script>
+
+</body>
+</html>
