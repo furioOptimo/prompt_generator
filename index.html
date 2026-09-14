@@ -7,13 +7,14 @@
 
   <style>
     :root {
+      color-scheme: dark;
       --bg: #111318;
       --panel: #191d24;
       --panel2: #222833;
       --text: #f4f7fb;
       --muted: #aeb7c6;
       --accent: #7dd3fc;
-      --border: #303846;
+      --border: #2e3745;
       --ok: #86efac;
     }
 
@@ -24,44 +25,68 @@
     body {
       margin: 0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: var(--bg);
+      background: radial-gradient(ellipse at 50% 0%, #1b2939 0%, transparent 65%), var(--bg);
+      min-height: 100vh;
       color: var(--text);
       line-height: 1.5;
     }
 
     .wrap {
-      width: min(920px, 92vw);
-      margin: 40px auto;
+      width: min(1140px, calc(100% - 64px));
+      margin: 56px auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
     }
 
     h1 {
       margin: 0 0 8px;
       font-size: clamp(28px, 5vw, 44px);
+      line-height: 1.15;
+      letter-spacing: -0.035em;
     }
 
     .sub {
       color: var(--muted);
-      margin: 0 0 28px;
+      margin: 12px 0 32px;
+      max-width: 640px;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
     }
 
     .card {
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 18px;
+      padding: 20px;
+      min-width: 0;
+    }
+
+    .grid .card {
+      min-height: 180px;
+    }
+
+    .output {
+      padding: 28px;
+      box-shadow: 0 16px 48px #00000020;
     }
 
     label {
       display: block;
-      font-weight: 700;
-      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
     }
 
     select,
@@ -73,43 +98,95 @@
       border-radius: 10px;
       padding: 11px 12px;
       font: inherit;
+      min-height: 46px;
+    }
+
+    select {
+      text-transform: capitalize;
+    }
+
+    :is(select, input, textarea, button):focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
     }
 
     .chords {
-      margin-top: 10px;
-      font-size: 18px;
-      font-weight: 700;
+      margin-top: 14px;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--accent);
-      word-spacing: 8px;
+    }
+
+    .title-section {
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .title-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    #song-title {
+      flex: 1;
+      min-width: 0;
+      height: 46px;
+      min-height: 46px;
+      padding: 4px 0;
+      resize: none;
+      background: transparent;
+      border: 0;
+      border-radius: 4px;
+      font-size: clamp(18px, 2.2vw, 25px);
+      font-family: inherit;
+      line-height: 1.5;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      color: var(--accent);
+    }
+
+    #copy-title {
+      flex-shrink: 0;
     }
 
     textarea {
       width: 100%;
-      min-height: 330px;
+      display: block;
+      min-height: 290px;
       resize: vertical;
       background: #0d1015;
       color: var(--text);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 16px;
-      font: 15px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      padding: 20px;
+      font: 14px/1.8 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
 
     .actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      margin-top: 14px;
+      margin-top: 20px;
     }
 
     button {
-      border: 0;
+      border: 1px solid transparent;
       border-radius: 10px;
       padding: 11px 16px;
-      font-weight: 800;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      min-height: 44px;
       cursor: pointer;
       background: var(--accent);
       color: #062231;
+      transition: background 150ms ease, border-color 150ms ease;
+    }
+
+    button:hover {
+      background: #a5e2fd;
     }
 
     button.secondary {
@@ -118,23 +195,81 @@
       border: 1px solid var(--border);
     }
 
+    button.secondary:hover {
+      background: #2b3544;
+      border-color: #53647a;
+    }
+
     #status {
       color: var(--ok);
       font-weight: 700;
       align-self: center;
       min-height: 1.5em;
+      font-size: 13px;
+      margin-left: auto;
     }
 
     .note {
       color: var(--muted);
-      font-size: 14px;
-      margin-top: 10px;
+      font-size: 12px;
+      margin-top: 14px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 960px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .wrap {
+        width: calc(100% - 32px);
+        margin: 32px auto;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .grid .card {
+        min-height: 0;
+      }
+
+      .output {
+        padding: 20px;
+      }
+
+      .title-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+
+      #song-title {
+        font-size: 18px;
+        flex: none;
+        height: 64px;
+      }
+
+      textarea {
+        min-height: 380px;
+        padding: 16px;
+      }
+
+      #status {
+        flex-basis: 100%;
+        margin-left: 0;
+      }
     }
   </style>
 </head>
 
 <body>
   <main class="wrap">
+
+    <p class="eyebrow">Atmospheric rock · Made for guitar</p>
 
     <h1>Prompt Generator</h1>
 
@@ -143,7 +278,7 @@
       atmospheric rock prompt automatically.
     </p>
 
-    <section class="grid">
+    <section class="grid" aria-label="Song settings">
 
       <div class="card">
         <label for="key">Key</label>
@@ -179,6 +314,7 @@
           <option>moody</option>
           <option>anthemic</option>
         </select>
+        <div class="note">Set the emotional direction.</div>
       </div>
 
       <div class="card">
@@ -189,11 +325,20 @@
           <option value="emotional" selected>Emotional</option>
           <option value="soaring">Soaring</option>
         </select>
+        <div class="note">Shape the size of the build.</div>
       </div>
 
     </section>
 
-    <section class="card">
+    <section class="card output" aria-label="Generated song details">
+
+      <div class="title-section">
+        <label for="song-title">Song title</label>
+        <div class="title-row">
+          <textarea id="song-title" rows="2" readonly></textarea>
+          <button class="secondary" id="copy-title">Copy title</button>
+        </div>
+      </div>
 
       <label for="prompt">Generated prompt</label>
 
@@ -209,7 +354,7 @@
           Reset
         </button>
 
-        <span id="status"></span>
+        <span id="status" role="status" aria-live="polite"></span>
 
       </div>
 
@@ -293,6 +438,9 @@
     const promptEl =
       document.getElementById("prompt");
 
+    const titleEl =
+      document.getElementById("song-title");
+
     const statusEl =
       document.getElementById("status");
 
@@ -335,6 +483,12 @@
 
       const intensityText =
         intensityDescriptions[intensity];
+
+      const titleCase = text =>
+        text.replace(/\b[a-z]/g, letter => letter.toUpperCase());
+
+      titleEl.value =
+        `${titleCase(mood)} ${titleCase(intensity)} in ${titleCase(key)}`;
 
 
       chordsEl.textContent =
@@ -403,6 +557,27 @@
 
         }
 
+      });
+
+
+    document
+      .getElementById("copy-title")
+      .addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(titleEl.value);
+          statusEl.textContent = "Title copied!";
+        }
+        catch {
+          titleEl.select();
+          const copied = document.execCommand("copy");
+          statusEl.textContent = copied
+            ? "Title copied!"
+            : "Select the title and copy it manually.";
+        }
+
+        setTimeout(() => {
+          statusEl.textContent = "";
+        }, 2400);
       });
 
 
