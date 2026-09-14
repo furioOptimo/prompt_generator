@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Music Prompt guitar pick</title>
+  <rect width="64" height="64" rx="16" fill="#111318"/>
+  <path d="M32 7C19 7 9 12 9 22c0 15 16 35 23 35s23-20 23-35C55 12 45 7 32 7Z" fill="#7dd3fc"/>
+  <path d="M35 19v21" fill="none" stroke="#111318" stroke-width="5" stroke-linecap="round"/>
+  <path d="M35 19c1 7 11 5 10 14-2-4-7-3-10-5Z" fill="#111318"/>
+  <ellipse cx="29" cy="40" rx="8" ry="6" transform="rotate(-20 29 40)" fill="#111318"/>
+</svg>
