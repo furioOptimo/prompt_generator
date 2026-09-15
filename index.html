@@ -387,7 +387,7 @@
 
       "C major": {
         chords: ["C", "F", "G", "Am", "Dm"],
-        note: "simple, with F often played as Fmaj7 or partial barre"
+        note: "simple, with F played as a partial barre"
       },
 
       "F major": {
@@ -467,7 +467,7 @@
       const key =
         keyEl.value;
 
-      const { chords, note } =
+      const { chords } =
         keys[key];
 
       const bpm =
@@ -496,14 +496,8 @@
         chords.join(" · ");
 
 
-      const capoPhrase =
-        note.includes("capo")
-          ? "Capo-friendly open guitar chords"
-          : "Playable open guitar chords";
-
-
       promptEl.value =
-`Instrumental atmospheric rock backing, 4/4, ${bpm} BPM (${doubleTime} double-time). ${capoPhrase}, ${key}: ${chords.join(", ")}. Simple, predictable, strummable harmony; vary chord lengths naturally by section: half/full/multiple bars. Soft humanized closed hats/shaker: quiet 16ths, clear 8th-note accents. Snare 2/4; deep sparse kick on 1, supports 3; rare chord pickups. Steady drums; no busy fills, ghost clutter, trap rolls or abrupt shifts. Brief toms/crashes at 8/16-bar transitions. Warm rounded clean low electric bass roots follow chord timing; sustain when spacious, move with changes; strong attacks lock to kick. Rare fifths/octaves/pickups; no slap, funk, runs or fills. Sparse singing guitar motifs repeat with subtle variation, sustain across chords, delay resolution; breathe. Spacious intro; bass/drums enter gradually. Build to ${mood} rock with ${intensityText}. Clear 4/8-bar phrases, uncluttered mids, room for lead guitar.`;
+`Instrumental atmospheric rock backing, 4/4, ${bpm} BPM (${doubleTime} double-time). Use playable open chords (capo OK), ${key}: ${chords.join(", ")}. Major/minor triads only; no 7ths/extensions. Predictable, strummable changes; vary half/full/multi-bar lengths by section. Soft humanized closed hats/shaker: quiet 16ths, clear 8th-note accents. Snare 2/4; deep sparse kick on 1, supports 3; rare chord pickups. Steady drums; no busy fills, ghost clutter, trap rolls or abrupt shifts. Brief toms/crashes at 8/16-bar transitions. Warm rounded clean low electric bass roots follow chord timing; sustain when spacious, move with changes; strong attacks lock to kick. Rare fifths/octaves/pickups; no slap, funk, runs or fills. Sparse singing guitar motifs: repeat, subtly vary, sustain across chords, delay resolution; breathe. Spacious intro; bass/drums enter gradually. Build to ${mood} rock with ${intensityText}. Clear 4/8-bar phrases, uncluttered mids, room for lead guitar.`;
 
     }
 
