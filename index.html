@@ -410,13 +410,13 @@
     const intensityDescriptions = {
 
       subtle:
-        "restrained and understated, with gentle dynamics, gradual development, and no oversized climax",
+        "gentle dynamics and no oversized climax",
 
       emotional:
-        "expressive and emotionally building, with warm dynamics and a satisfying gradual lift",
+        "warm expression and a gradual emotional lift",
 
       soaring:
-        "expansive and powerful, building toward a wide, uplifting, climactic section while remaining spacious for lead guitar"
+        "a wide, powerful climax that stays spacious"
 
     };
 
@@ -498,12 +498,12 @@
 
       const capoPhrase =
         note.includes("capo")
-          ? "Use capo-friendly open-position guitar voicings"
-          : "Use a simple, highly playable open-chord guitar progression";
+          ? "Capo-friendly open guitar chords"
+          : "Playable open guitar chords";
 
 
       promptEl.value =
-`Instrumental melodic atmospheric rock backing track in 4/4 at ${bpm} BPM, with a ${doubleTime} BPM double-time feel. ${capoPhrase} in ${key}, built mainly from ${chords.join(", ")}, with long chord durations and minimal harmonic complexity. Use steady, lightly humanized sixteenth-note closed hi-hats or shaker, strong snare on beats 2 and 4, and a deep, restrained syncopated kick emphasizing beats 1 and 3 with occasional pickups. Keep drums predictable, avoiding busy fills, ghost notes, trap rolls, and abrupt changes. Add brief tom fills and crashes only every 8 or 16 bars. Build from a spacious intro into a ${mood} rock section that is ${intensityText}. Maintain clear phrasing, steady harmony, and plenty of room for expressive lead guitar.`;
+`Instrumental melodic atmospheric rock backing track, 4/4 at ${bpm} BPM, ${doubleTime} BPM double-time feel. ${capoPhrase} in ${key}: ${chords.join(", ")}. Hold chords; keep harmony simple. Soft, humanized closed hats or shaker: quiet 16ths with alternating 8th-note accents. Strong snare on 2 and 4; deep, sparse kick anchors 1, supports 3, with sparse chord-change pickups. Predictable drums; no busy fills, ghost-note clutter, trap rolls or abrupt changes. Brief tom fills/crashes only at 8/16-bar transitions. Warm, rounded clean electric bass: sustain low chord roots for half/full bars. Align main attacks with downbeat kicks; sustain through other hits. Occasional fifths, octaves or stepwise pickups; no slap, funk, busy runs or melodic fills. Spacious intro; bass and full drums enter gradually. Build toward ${mood} rock with ${intensityText}. Clear 4/8-bar phrasing, steady harmony, uncluttered midrange and room for expressive lead guitar.`;
 
     }
 
